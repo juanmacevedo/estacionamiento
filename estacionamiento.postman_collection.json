@@ -1,0 +1,335 @@
+{
+  "info": {
+    "name": "Estacionamiento API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const offsetHours = -3;",
+          "const now = new Date();",
+          "const localTime = new Date(now.getTime() + offsetHours * 60 * 60 * 1000);",
+          "pm.variables.set('timestampParaguay', Math.floor(localTime.getTime() / 1000));"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Reset DB",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reset",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "reset"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Calles",
+      "item": [
+        {
+          "name": "Crear calle",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/calles/",
+              "host": ["{{baseUrl}}"],
+              "path": ["calles", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Espacios",
+      "item": [
+        {
+          "name": "Crear espacio",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {
+              "raw": "{{baseUrl}}/espacios/",
+              "host": ["{{baseUrl}}"],
+              "path": ["espacios", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calle_id\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Listar espacios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/espacios/",
+              "host": ["{{baseUrl}}"],
+              "path": ["espacios", ""]
+            }
+          }
+        },
+        {
+          "name": "Listar espacios por calle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/espacios/?calle_id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["espacios", ""],
+              "query": [{"key": "calle_id", "value": "1"}]
+            }
+          }
+        },
+        {
+          "name": "Modificar espacio - cambiar calle",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {
+              "raw": "{{baseUrl}}/espacios/1/",
+              "host": ["{{baseUrl}}"],
+              "path": ["espacios", "1", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calle_id\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "Modificar espacio - cambiar estado",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {
+              "raw": "{{baseUrl}}/espacios/1/",
+              "host": ["{{baseUrl}}"],
+              "path": ["espacios", "1", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ocupado\": true\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehiculos",
+      "item": [
+        {
+          "name": "Registrar vehiculo",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehiculos/",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehiculos", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ocupaciones",
+      "item": [
+        {
+          "name": "Registrar ocupacion",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculo_id\": 1,\n  \"espacio_id\": 1,\n  \"fecha_inicio\": \"{{timestampParaguay}}\",\n  \"duracion_horas\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "Listar ocupaciones - todas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", ""]
+            }
+          }
+        },
+        {
+          "name": "Listar ocupaciones - historicas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/?finalizadas=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", ""],
+              "query": [{"key": "finalizadas", "value": "true"}]
+            }
+          }
+        },
+        {
+          "name": "Listar ocupaciones por vehiculo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/?vehiculo_id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", ""],
+              "query": [{"key": "vehiculo_id", "value": "1"}]
+            }
+          }
+        },
+        {
+          "name": "Listar ocupaciones historicas por vehiculo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/?vehiculo_id=1&finalizadas=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", ""],
+              "query": [
+                {"key": "vehiculo_id", "value": "1"},
+                {"key": "finalizadas", "value": "true"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar ocupaciones por espacio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/?espacio_id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", ""],
+              "query": [{"key": "espacio_id", "value": "1"}]
+            }
+          }
+        },
+        {
+          "name": "Listar ocupaciones historicas por espacio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/?espacio_id=1&finalizadas=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", ""],
+              "query": [
+                {"key": "espacio_id", "value": "1"},
+                {"key": "finalizadas", "value": "true"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Iniciar ocupacion",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/1/iniciar/",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", "1", "iniciar", ""]
+            }
+          }
+        },
+        {
+          "name": "Finalizar ocupacion",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/1/finalizar/",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", "1", "finalizar", ""]
+            }
+          }
+        },
+        {
+          "name": "Consultar disponibilidad - todos los espacios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/disponibilidad?fecha_inicio={{timestampParaguay}}&fecha_fin={{timestampParaguay}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", "disponibilidad"],
+              "query": [
+                {"key": "fecha_inicio", "value": "{{timestampParaguay}}"},
+                {"key": "fecha_fin", "value": "{{timestampParaguay}}"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar disponibilidad - por calle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/disponibilidad?calle_id=1&fecha_inicio={{timestampParaguay}}&fecha_fin={{timestampParaguay}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", "disponibilidad"],
+              "query": [
+                {"key": "calle_id", "value": "1"},
+                {"key": "fecha_inicio", "value": "{{timestampParaguay}}"},
+                {"key": "fecha_fin", "value": "{{timestampParaguay}}"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar disponibilidad - por espacio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ocupaciones/disponibilidad?espacio_id=1&fecha_inicio={{timestampParaguay}}&fecha_fin={{timestampParaguay}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["ocupaciones", "disponibilidad"],
+              "query": [
+                {"key": "espacio_id", "value": "1"},
+                {"key": "fecha_inicio", "value": "{{timestampParaguay}}"},
+                {"key": "fecha_fin", "value": "{{timestampParaguay}}"}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
